@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transfer Money</title>
+    <link rel="stylesheet" href="{% static 'bank/css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Transfer Money</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="recipient"
+          placeholder="Recipient Username"
+          required
+        />
+        <input
+          type="number"
+          name="amount"
+          placeholder="Amount"
+          required
+          step="0.01"
+        />
+        <button type="submit">Transfer</button>
+      </form>
+      <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </body>
+</html>

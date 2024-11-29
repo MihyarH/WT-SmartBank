@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'bank/css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Welcome, {{ request.user.username }}</h2>
+      <p><strong>Account Balance:</strong> ${{ account.balance }}</p>
+      <h3>Transaction History</h3>
+      <form method="GET" action="{% url 'dashboard' %}" class="form-container">
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" id="start_date" />
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" id="end_date" />
+
+        <label for="transaction_type">Transaction Type:</label>
+        <select name="transaction_type" id="transaction_type">
+          <option value="">All</option>
+          <option value="credit">Credit</option>
+          <option value="debit">Debit</option>
+        </select>
+
+        <button type="submit">Filter</button>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in transactions %}
+          <tr>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>${{ transaction.amount }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3">No transactions found</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <a href="{% url 'transfer' %}">Transfer Money</a>
+      <form method="POST" action="{% url 'logout' %}" style="display: inline">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </body>
+</html>
