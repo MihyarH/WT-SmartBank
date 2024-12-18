@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
+    <div class="navbar">
+      <h3>MMA Bank</h3>
+      <div>
+        <a href="{% url 'login' %}" class="button">Login</a>
+        <a href="{% url 'register' %}" class="button">Register</a>
+      </div>
+    </div>
+
+    <div class="container">{% block content %} {% endblock %}</div>
+
+    <footer>
+      <p>&copy; 2024 Banking System. All Rights Reserved.</p>
+    </footer>
+  </body>
+</html>

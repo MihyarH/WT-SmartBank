@@ -1,0 +1,181 @@
+/* General Reset */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #eeeee4;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #154c79;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #0e3a5e;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar h3 {
+  margin: 0;
+}
+
+.navbar .button {
+  color: #fff;
+  margin-left: 10px;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  background: #ffffff;
+  margin: 20px auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  text-align: center;
+  color: #333;
+}
+
+.balance-info {
+  font-size: 1.2em;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Filter Form */
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.btn {
+  background-color: #76b5c5;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #5f9faf;
+  transform: translateY(-2px);
+}
+
+.btn-sec {
+  background-color: #76b5c5;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-left: 10px;
+  height: 36px;
+}
+
+.btn-sec:hover {
+  background-color: #5f9faf;
+  transform: translateY(-2px);
+}
+
+.btn-sec:active {
+  background-color: #235966;
+}
+
+/* Transaction Table */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.transaction-table th,
+.transaction-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.transaction-table th {
+  background-color: #0e3a5e;
+  color: #fff;
+}
+
+.transaction-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Styling for Amount to Deposit Input Field */
+input[name="amount"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px 15px;
+  margin: 15px 0;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[name="amount"]:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 6px #666;
+}
+/* Deposit Form */
+.deposit-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.deposit-group {
+  display: flex;
+  flex-direction: column;
+}
+
