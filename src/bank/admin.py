@@ -4,11 +4,9 @@ from .models import CustomUser, Account, Transaction
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('username', 'email', 'first_name', 'last_name', 'gender', 'phone_number', 'birth_date', 'is_staff')
+    list_display = ('username', 'email', 'phone_number', 'dob', 'is_staff')  # Use 'dob' instead of 'birth_date'
     fieldsets = UserAdmin.fieldsets + (
-        ('Additional Information', {
-            'fields': ('phone_number', 'gender', 'address', 'birth_date')
-        }),
+        ('Additional Info', {'fields': ('phone_number', 'gender', 'address', 'dob')}),
     )
 
 admin.site.register(CustomUser, CustomUserAdmin)
@@ -19,4 +17,4 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('account', 'recipient', 'transaction_type', 'amount', 'date')
+    list_display = ('account', 'transaction_type', 'amount', 'date')

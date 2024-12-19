@@ -28,7 +28,18 @@ a {
 
 .navbar .button {
   color: #fff;
-  margin-left: 10px;
+  background-color: #76b5c5;
+  padding: 8px 15px;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .btn:hover,
+.navbar .button:hover {
+  background-color: #76b5c5;
 }
 
 /* Dashboard Container */
@@ -178,4 +189,3 @@ input[name="amount"]:focus {
   display: flex;
   flex-direction: column;
 }
-

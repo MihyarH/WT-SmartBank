@@ -12,6 +12,7 @@
       <h3>MMA Bank</h3>
       <div>
         <a href="{% url 'profile' %}" class="button">Profile</a>
+        
         <form method="POST" action="{% url 'logout' %}" style="display: inline">
           {% csrf_token %}
           <button type="submit" class="btn">Logout</button>
@@ -22,8 +23,18 @@
     <div class="dashboard-container">
       <!-- Welcome Message and Balance -->
       <h2 class="dashboard-title">Welcome, {{ request.user.username }}</h2>
-      <p class="balance-info"><strong>Account Balance:</strong> ${{ account.balance }}</p>
-
+      <p class="balance-info">
+        <strong>Total Balance:</strong> ${{ total_balance }}
+      </p>
+        <!-- Account Balances -->
+  <h3>Your Accounts</h3>
+  <ul>
+    {% for account in accounts %}
+      <li>
+        <strong>{{ account.type|capfirst }} Account:</strong> ${{ account.balance }}
+      </li>
+    {% endfor %}
+  </ul>
       <!-- Filter Section -->
       <form method="GET" action="{% url 'dashboard' %}" class="filter-form">
         <div class="filter-group">

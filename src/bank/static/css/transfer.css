@@ -1,141 +1,103 @@
-/* General Reset */
-body, h2, h3, p, ul, li, form {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
-  }
-  
-  /* Navbar */
-.navbar {
-    background-color: #0e3a5e;
-    color: #fff;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
 }
-  
-  .navbar h3 {
-    font-size: 1.5rem;
-  }
-  
-  .navbar .button,
-  .navbar .btn {
-    color: #fff;
-    background-color: #0d47a1;
-    padding: 8px 15px;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .navbar .btn:hover,
-  .navbar .button:hover {
-    background-color: #0b3d91;
-  }
-  
-  /* Dashboard Container */
-  .dashboard-container {
-    background-color: #fff;
-    max-width: 500px;
-    margin: 40px auto;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    text-align: center;
-  }
-  
-  .dashboard-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #1a73e8;
-  }
-  
-  /* Form Styles */
-  .form-container {
-    margin-bottom: 20px;
-  }
-  
-  .deposit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .deposit-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-    text-align: left;
-  }
-  
-  .deposit-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  .deposit-group input {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-  }
-  
-  .deposit-group input:focus {
-    border-color: #1a73e8;
-    outline: none;
-  }
-  
-  /* Buttons */
-  .btn,
-  .btn-sec {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #1a73e8;
-    color: #fff;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-sec {
-    margin-top: 10px;
-  }
-  
-  .btn:hover,
-  .btn-sec:hover {
-    background-color: #0b3d91;
-  }
-  
-  /* Messages */
-  .messages {
-    list-style: none;
-    margin-top: 10px;
-    color: green;
-    font-weight: bold;
-  }
-  
-  /* Footer */
-  footer {
-    text-align: center;
-    margin-top: 20px;
-    color: #777;
-    font-size: 0.9rem;
-  }
-  
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0044cc;
+  padding: 10px 20px;
+  color: white;
+}
+
+.navbar h3 {
+  margin: 0;
+}
+
+.navbar .button,
+.navbar .btn {
+  text-decoration: none;
+  color: white;
+  background-color: #0056e0;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.navbar .button:hover,
+.navbar .btn:hover {
+  background-color: #003aa3;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0044cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: #003aa3;
+}
+
+.messages {
+  margin-top: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}

@@ -12,6 +12,7 @@
       <h3>MMA Bank</h3>
       <div>
         <a href="{% url 'profile' %}" class="button">Profile</a>
+        <a href="{% url 'dashboard' %}" class="button">Dashboard</a>
         <form method="POST" action="{% url 'logout' %}" style="display: inline">
           {% csrf_token %}
           <button type="submit" class="btn">Logout</button>
@@ -21,32 +22,40 @@
 
     <div class="form-container">
       <h2>Transfer Money</h2>
-      <form method="POST">
+      <form method="POST" class="transfer-form">
         {% csrf_token %}
-        <input
-          type="text"
-          name="recipient"
-          placeholder="Recipient Username"
-          required
-        />
-        <input
-          type="number"
-          name="amount"
-          placeholder="Amount"
-          required
-          step="0.01"
-        />
-        <button type="submit">Transfer</button>
+        <div class="form-group">
+          <label for="recipient">Recipient Username:</label>
+          <input
+            type="text"
+            id="recipient"
+            name="recipient"
+            placeholder="Enter recipient's username"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="amount">Amount:</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            placeholder="Enter amount to transfer"
+            required
+            step="0.01"
+          />
+        </div>
+        <button type="submit" class="button">Transfer</button>
       </form>
-      <a href="{% url 'dashboard' %}">Back to Dashboard</a>
       {% if messages %}
-      <ul>
+      <ul class="messages">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <li class="message {{ message.tags }}">{{ message }}</li>
         {% endfor %}
       </ul>
       {% endif %}
     </div>
+
     <footer>
       <p>&copy; 2024 MMA Bank. All Rights Reserved.</p>
     </footer>

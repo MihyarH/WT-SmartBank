@@ -5,11 +5,18 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 
 class Account(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    ACCOUNT_TYPES = [
+        ('checking', 'Checking'),
+        ('savings', 'Savings'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='accounts')
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    type = models.CharField(max_length=10, choices=ACCOUNT_TYPES)
 
     def __str__(self):
-        return f"{self.user.username}'s Account"
+        return f"{self.user.username}'s {self.get_type_display()} Account"
+
     
 class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
@@ -29,17 +36,16 @@ def validate_birth_date(value):
 
     
 class CustomUser(AbstractUser):
+    address = models.CharField(max_length=255, blank=True, null=True)
+    dob = models.DateField(blank=True, null=True)
     phone_number = models.CharField(
         max_length=15,
-        validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
+        validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')],
+        blank=True,
+        null=True
     )
     gender = models.CharField(
         max_length=10,
         choices=[('Male', 'Male'), ('Female', 'Female')],
         blank=True
     )
-    address = models.CharField(max_length=255, blank=True, null=True)
-    birth_date = models.DateField(validators=[validate_birth_date], null=True, blank=True)
-
-    def __str__(self):
-        return self.username

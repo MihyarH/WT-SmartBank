@@ -16,18 +16,57 @@ from .forms import CustomUserRegistrationForm
 User = get_user_model()
 
 
+# def register(request):
+#     if request.method == 'POST':
+#         form = CustomUserRegistrationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False) 
+#             user.set_password(form.cleaned_data['password']) 
+#             user.first_name = form.cleaned_data.get('first_name')
+#             user.last_name = form.cleaned_data.get('last_name')
+#             user.dob = form.cleaned_data.get('dob')
+#             user.phone_number = form.cleaned_data.get('phone_number')
+#             user.gender = form.cleaned_data.get('gender')
+#             account_type = request.POST.get('account_type')
+#             user.save()  # Save to the database
+#             Account.objects.create(user=user, balance=0.00)
+#             return redirect('login')
+#     else:
+#         form = CustomUserRegistrationForm()
+#     return render(request, 'bank/register.html', {'form': form})
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
+            user.first_name = form.cleaned_data.get('first_name')
+            user.last_name = form.cleaned_data.get('last_name')
+            user.dob = form.cleaned_data.get('dob')
+            user.phone_number = form.cleaned_data.get('phone_number')
+            user.gender = form.cleaned_data.get('gender')
             user.save()
-            Account.objects.create(user=user, balance=0.00)
+
+            # Create the account(s)
+            account_type = request.POST.get('account_type')
+            Account.objects.create(user=user, type=account_type, balance=0.00)
+
             return redirect('login')
     else:
         form = CustomUserRegistrationForm()
     return render(request, 'bank/register.html', {'form': form})
+
+
+@login_required
+def add_account(request):
+    if request.method == 'POST':
+        account_type = request.POST.get('account_type')
+        Account.objects.create(user=request.user, type=account_type, balance=0.00)
+        messages.success(request, f'{account_type.capitalize()} account created successfully!')
+        return redirect('dashboard')
+    return render(request, 'bank/add_account.html')
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -43,14 +82,16 @@ def login_user(request):
 
     return render(request, 'bank/login.html')
 
-
 @login_required
 def dashboard(request):
-    # Get the logged-in user's account
-    account = Account.objects.get(user=request.user)
+    # Fetch all accounts for the logged-in user
+    accounts = Account.objects.filter(user=request.user)
 
-    # Get all transactions for the user's account
-    transactions = Transaction.objects.filter(account=account).order_by('-date')
+    # Calculate the total balance across all accounts
+    total_balance = sum(account.balance for account in accounts)
+
+    # Get all transactions for the user's accounts
+    transactions = Transaction.objects.filter(account__in=accounts).order_by('-date')
 
     # Apply filters
     start_date = request.GET.get('start_date')
@@ -69,10 +110,10 @@ def dashboard(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Pass the paginated transactions and filters to the template
     return render(request, 'bank/dashboard.html', {
-        'account': account,
-        'transactions': page_obj,  # Use `page_obj` instead of `transactions`
+        'accounts': accounts,
+        'total_balance': total_balance,
+        'transactions': page_obj,
         'filters': {
             'start_date': start_date,
             'end_date': end_date,
@@ -81,6 +122,40 @@ def dashboard(request):
     })
 
 
+@login_required
+def deposit(request):
+    if request.method == 'POST':
+        account_id = request.POST.get('account_id')
+        amount = request.POST.get('amount')
+
+        try:
+            # Validate and convert the amount to Decimal
+            amount = Decimal(amount)
+            if amount <= 0:
+                raise ValueError("Amount must be positive.")
+        except (ValueError, InvalidOperation):
+            messages.error(request, 'Invalid amount. Please enter a valid positive number.')
+            return render(request, 'bank/deposit.html', {'accounts': Account.objects.filter(user=request.user)})
+
+        try:
+            # Fetch the selected account
+            account = Account.objects.get(id=account_id, user=request.user)
+            account.balance += amount
+            account.save()
+
+            # Log the deposit transaction
+            Transaction.objects.create(
+                account=account,
+                transaction_type='credit',
+                amount=amount,
+            )
+
+            messages.success(request, f'Deposited ${amount} successfully!')
+            return redirect('dashboard')
+        except Account.DoesNotExist:
+            messages.error(request, 'Selected account does not exist.')
+
+    return render(request, 'bank/deposit.html', {'accounts': Account.objects.filter(user=request.user)})
 
 @login_required
 def transfer(request):
@@ -98,10 +173,10 @@ def transfer(request):
             return render(request, 'bank/transfer.html')
 
         try:
-            # Fetch recipient and sender accounts
+            # Fetch recipient and sender checking accounts
             recipient_user = User.objects.get(username=recipient_username)
-            recipient_account = Account.objects.get(user=recipient_user)
-            sender_account = Account.objects.get(user=request.user)
+            recipient_account = Account.objects.get(user=recipient_user, type='checking')
+            sender_account = Account.objects.get(user=request.user, type='checking')
 
             # Check if the sender has enough balance
             if sender_account.balance >= amount:
@@ -133,46 +208,13 @@ def transfer(request):
 
         except User.DoesNotExist:
             messages.error(request, 'Recipient does not exist.')
-
+        except Account.DoesNotExist:
+            messages.error(request, 'Recipient does not have a checking account.')
         except Exception as e:
             logging.error(f"Transfer Error: {e}")
             messages.error(request, 'An error occurred. Please try again.')
 
     return render(request, 'bank/transfer.html')
-
-
-@login_required
-def deposit(request):
-    if request.method == 'POST':
-        amount = request.POST['amount']
-
-        try:
-            # Validate and convert the amount to Decimal
-            amount = Decimal(amount)
-            if amount <= 0:
-                raise ValueError("Amount must be positive.")
-        except (ValueError, InvalidOperation):
-            messages.error(request, 'Invalid amount. Please enter a valid positive number.')
-            return render(request, 'bank/deposit.html')
-
-        # Add the deposit amount to the user's account balance
-        account = Account.objects.get(user=request.user)
-        account.balance += amount
-        account.save()
-
-        # Log the deposit transaction
-        Transaction.objects.create(
-            account=account,
-            transaction_type='credit',
-            amount=amount,
-        )
-
-        messages.success(request, f'Deposited ${amount} successfully!')
-        return redirect('dashboard')
-
-    return render(request, 'bank/deposit.html')
-
-
 
 @login_required
 def export_transactions(request):
@@ -218,8 +260,6 @@ def export_transactions(request):
 
     return response
 
-
-
 @login_required
 def profile(request):
     user = request.user
@@ -247,3 +287,6 @@ def profile(request):
         'form': form,
         'message': message,
     })
+
+def landing_page(request):
+    return render(request, 'bank/landing.html')
